@@ -8,9 +8,20 @@ namespace Scenes.Lobby.Manager
 {
     public class LobbyManager : MonoBehaviour
     {
+        //Create Session
+        public void OnButton0()
+        {
+            SceneManager.LoadScene((int)Constant.SceneName.SessionCreateScene);
+        }
+
+        //Back
         public void OnButton1()
         {
-            SceneManager.LoadScene(Constant.SceneName.StartMenuScene);
+            //ロビーから離脱
+            Network.NetworkManager.Runner.Shutdown();
+
+            //スタートメニューシーンへ遷移
+            SceneManager.LoadScene((int)Constant.SceneName.StartMenuScene);
         }
     }
 }

@@ -1,8 +1,10 @@
 namespace Constant
 {
-    public class SceneName
+    public enum SceneName
     {
-        public static string StartMenuScene = "StartMenu";
-        public static string LobbyScene = "Lobby";
+        StartMenuScene,
+        LobbyScene,
+        SessionCreateScene,
+        InGameScene,
     }
 }
