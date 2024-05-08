@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Fusion;
 using Fusion.Sockets;
 
@@ -29,9 +30,10 @@ namespace Network
 
         public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
         {
-            foreach (var session in sessionList)
+            //ロビーシーン
+            if (Scenes.Lobby.Manager.LobbyManager.Instance != null)
             {
-                Debug.Log(session.Name);
+                Scenes.Lobby.Manager.LobbyManager.Instance.SessionListUpdate(sessionList);
             }
         }
 
