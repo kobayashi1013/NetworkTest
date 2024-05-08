@@ -470,9 +470,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 705509926}
-        m_TargetAssemblyTypeName: Scenes.LobbyCreate.Manager.LobbyCreateManager,
+        m_TargetAssemblyTypeName: Scenes.LobbyCreate.Manager.SessionCreateManager,
           Assembly-CSharp
-        m_MethodName: GameLauncher
+        m_MethodName: OnButton0
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1222,7 +1222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b5d27c845e1a8249af5eec2dd4de7a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _networkRunnerPrefab: {fileID: 7876573081687707972, guid: a1e9b062346b6ac40a320aafdb600002, type: 3}
 --- !u!4 &705509927
 Transform:
   m_ObjectHideFlags: 0

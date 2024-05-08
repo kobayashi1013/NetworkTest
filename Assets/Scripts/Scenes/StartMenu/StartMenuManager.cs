@@ -11,11 +11,13 @@ namespace Scenes.StartMenu.Manager
     {
         [SerializeField] private NetworkRunner _networkRunnerPrefab;
 
+        //ロビーへの参加
         public async void OnButton0()
         {
             //NetworkRunnerの起動
             var networkRunner = Instantiate(_networkRunnerPrefab);
             networkRunner.ProvideInput = true;
+            DontDestroyOnLoad(networkRunner);
 
             //ロビーへの参加
             var result = await networkRunner.JoinSessionLobby(SessionLobby.ClientServer);
@@ -23,7 +25,7 @@ namespace Scenes.StartMenu.Manager
             if (result.Ok) Debug.Log("JoinLobby");
             else Debug.LogError($"error : {result.ShutdownReason}");
 
-            //ロビーシーンへの遷移
+            //ロビーシーンへ遷移
             SceneManager.LoadScene((int)Constant.SceneName.LobbyScene);
         }
     }

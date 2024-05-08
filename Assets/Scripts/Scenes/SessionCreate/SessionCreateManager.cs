@@ -9,24 +9,26 @@ namespace Scenes.LobbyCreate.Manager
 {
     public class SessionCreateManager : MonoBehaviour
     {
-        [SerializeField] private NetworkRunner _networkRunnerPrefab;
-
-        public async void GameLauncher()
+        //ÉZÉbÉVÉáÉìçÏê¨
+        public async void OnButton0()
         {
-            var networkRunner = Instantiate(_networkRunnerPrefab);
-            networkRunner.ProvideInput = true;
-
-            var result = await networkRunner.StartGame(new StartGameArgs()
+            var result = await Network.NetworkManager.Runner.StartGame(new StartGameArgs()
             {
                 GameMode = GameMode.Host,
-                Scene = SceneRef.FromIndex((int)Constant.SceneName.LobbyScene),
+                Scene = SceneRef.FromIndex((int)Constant.SceneName.InGameScene),
                 SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
+                SessionName = "test",
+                PlayerCount = 2
             });
 
-            if (result.Ok) Debug.Log("Host");
-            else Debug.LogError("error : LobbyCreate");
+            if (result.Ok)
+            {
+                Debug.Log("Host");
+            }
+            else Debug.LogError($"error : {result.ShutdownReason}");
         }
 
+        //Back
         public void OnButton1()
         {
             SceneManager.LoadScene((int)Constant.SceneName.LobbyScene);
