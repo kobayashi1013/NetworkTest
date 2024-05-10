@@ -11,10 +11,14 @@ namespace Network
     public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         public static NetworkRunner Runner;
+        public static NetworkManager Instance;
+
+        public List<SessionInfo> updatedSessionList = new List<SessionInfo>();
 
         void Awake()
         {
             Runner = this.gameObject.GetComponent<NetworkRunner>();
+            Instance = this;
         }
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
@@ -30,11 +34,8 @@ namespace Network
 
         public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
         {
-            //ロビーシーン
-            if (Scenes.Lobby.Manager.LobbyManager.Instance != null)
-            {
-                Scenes.Lobby.Manager.LobbyManager.Instance.SessionListUpdate(sessionList);
-            }
+            //セッション更新
+            updatedSessionList = new List<SessionInfo>(sessionList);
         }
 
         public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }

@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 using Fusion;
 
 namespace Scenes.LobbyCreate.Manager
 {
     public class SessionCreateManager : MonoBehaviour
     {
+        private const int _maxPlayer = 2; //二人ゲーム
+
+        [SerializeField] private TMP_InputField _inputField0;
+        [SerializeField] private Button _button0;
+
         //セッション作成
         public async void OnButton0()
         {
@@ -17,15 +23,24 @@ namespace Scenes.LobbyCreate.Manager
                 GameMode = GameMode.Host,
                 Scene = SceneRef.FromIndex((int)Constant.SceneName.InGameScene),
                 SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
-                SessionName = "test",
-                PlayerCount = 2
+                SessionName = _inputField0.text,
+                PlayerCount = _maxPlayer
             });
 
             if (result.Ok)
             {
                 Debug.Log("Host");
+
+                //ボタンロック
+                _button0.interactable = false;
             }
-            else Debug.LogError($"error : {result.ShutdownReason}");
+            else
+            {
+                Debug.LogError($"error : {result.ShutdownReason}");
+
+                //ロック解除
+                _button0.interactable = true;
+            }
         }
 
         //Back

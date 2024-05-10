@@ -11,15 +11,14 @@ namespace Scenes.Lobby.Manager
 {
     public class LobbyManager : MonoBehaviour
     {
-        [SerializeField] private GameObject _sessionList;
-        [SerializeField] private GameObject _sessionPrefab;
-
-        public static LobbyManager Instance;
-        private List<SessionInfo> _prevSessionList = new List<SessionInfo>();
+        [SerializeField] private GameObject _sessionListObj;
+        [SerializeField] private SessionData _sessionDataPrefab;
+        [SerializeField] private Button _button1;
+        [SerializeField] private int _sessionViewPadding = 0;
 
         void Awake()
         {
-            if (Instance == null) Instance = this;
+            SessionListUpdate();
         }
 
         //Create Session
@@ -31,6 +30,9 @@ namespace Scenes.Lobby.Manager
         //Back
         public void OnButton1()
         {
+            //ボタンロック
+            _button1.interactable = false;
+
             //ロビーから離脱
             Network.NetworkManager.Runner.Shutdown();
 
@@ -38,20 +40,28 @@ namespace Scenes.Lobby.Manager
             SceneManager.LoadScene((int)Constant.SceneName.StartMenuScene);
         }
 
-        public void SessionListUpdate(List<SessionInfo> sessionList)
+        //セッションビューの更新
+        public void OnButton2()
+        {
+            SessionListUpdate();
+        }
+
+        //セッションビューの更新処理
+        private void SessionListUpdate()
         {
             //セッション削除
-            foreach (Transform child in _sessionList.transform)
+            foreach (Transform child in _sessionListObj.transform)
             {
                 Destroy(child.gameObject);
             }
 
-            //セッション表示
-            foreach (var session in sessionList)
+            //セッション描画
+            for (int i = 0; i < Network.NetworkManager.Instance.updatedSessionList.Count; i++)
             {
-                var obj = Instantiate(_sessionPrefab);
-                obj.transform.SetParent(_sessionList.transform, false);
-                obj.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = session.Name;
+                var obj = Instantiate(_sessionDataPrefab);
+                obj.transform.SetParent(_sessionListObj.transform, false);
+                obj.transform.localPosition = new Vector3(0, -1 * i * _sessionViewPadding, 0);
+                obj.Init(Network.NetworkManager.Instance.updatedSessionList[i].Name);
             }
         }
     }
