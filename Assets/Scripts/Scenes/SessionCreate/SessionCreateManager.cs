@@ -18,21 +18,22 @@ namespace Scenes.LobbyCreate.Manager
         //セッション作成
         public async void OnButton0()
         {
+            //ボタンロック
+            _button0.interactable = false;
+
+            //セッション作成
             var result = await Network.NetworkManager.Runner.StartGame(new StartGameArgs()
             {
-                GameMode = GameMode.Host,
-                Scene = SceneRef.FromIndex((int)Constant.SceneName.InGameScene),
-                SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
-                SessionName = _inputField0.text,
-                PlayerCount = _maxPlayer
+                GameMode = GameMode.Host, //ゲームでの権限
+                Scene = SceneRef.FromIndex((int)Constant.SceneName.InGameScene), //次のゲームシーンの選択
+                SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のSceneManagerの指定
+                SessionName = _inputField0.text, //セッション名の決定
+                PlayerCount = _maxPlayer //最大人数の決定
             });
 
             if (result.Ok)
             {
                 Debug.Log("Host");
-
-                //ボタンロック
-                _button0.interactable = false;
             }
             else
             {

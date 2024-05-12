@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sessionNameTMP: {fileID: 1694795003851324410}
+  _joinButton: {fileID: 2765060013397524347}
 --- !u!1 &820354754807898282
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +175,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3978941196504685765}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -6633067205481185541}
+        m_TargetAssemblyTypeName: Scenes.Lobby.SessionData, Assembly-CSharp
+        m_MethodName: PushJoinButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1690474758400033909
 GameObject:
   m_ObjectHideFlags: 0
