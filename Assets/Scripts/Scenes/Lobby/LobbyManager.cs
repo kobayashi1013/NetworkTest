@@ -12,8 +12,7 @@ namespace Scenes.Lobby.Manager
     public class LobbyManager : MonoBehaviour
     {
         [SerializeField] private GameObject _sessionListObj;
-        [SerializeField] private SessionData _sessionDataPrefab;
-        [SerializeField] private Button _button1;
+        [SerializeField] private Prefab.SessionData _sessionDataPrefab;
         [SerializeField] private int _sessionViewPadding = 0;
 
         void Awake()
@@ -31,7 +30,11 @@ namespace Scenes.Lobby.Manager
         public void OnButton1()
         {
             //ボタンロック
-            _button1.interactable = false;
+            var buttonList = FindObjectsOfType<Button>();
+            foreach (var button in buttonList)
+            {
+                button.interactable = false;
+            }
 
             //ロビーから離脱
             Network.NetworkManager.Runner.Shutdown();

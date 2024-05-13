@@ -5,12 +5,11 @@ using UnityEngine.UI;
 using TMPro;
 using Fusion;
 
-namespace Scenes.Lobby
+namespace Prefab
 {
     public class SessionData : MonoBehaviour
     {
         [SerializeField] private TMP_Text _sessionNameTMP;
-        [SerializeField] private Button _joinButton;
 
         private string _sessionName = "";
 
@@ -25,7 +24,11 @@ namespace Scenes.Lobby
         public async void PushJoinButton()
         {
             //ボタンロック
-            _joinButton.interactable = false;
+            var buttonList = FindObjectsOfType<Button>();
+            foreach (var button in buttonList)
+            {
+                button.interactable = false;
+            }
 
             //セッションに参加
             var result = await Network.NetworkManager.Runner.StartGame(new StartGameArgs()
@@ -45,7 +48,10 @@ namespace Scenes.Lobby
                 Debug.LogError($"error : {result.ShutdownReason}");
 
                 //ロック解除
-                _joinButton.interactable = true;
+                foreach (var button in buttonList)
+                {
+                    button.interactable = true;
+                }
             }
         }
     }

@@ -10,13 +10,16 @@ namespace Scenes.StartMenu.Manager
     public class StartMenuManager : MonoBehaviour
     {
         [SerializeField] private NetworkRunner _networkRunnerPrefab;
-        [SerializeField] private Button _button0;
 
         //ロビーへの参加
         public async void OnButton0()
         {
             //ボタンロック
-            _button0.interactable = false;
+            var buttonList = FindObjectsOfType<Button>();
+            foreach (var button in buttonList)
+            {
+                button.interactable = false;
+            }
 
             //NetworkRunnerの起動
             var networkRunner = Instantiate(_networkRunnerPrefab);
@@ -38,7 +41,10 @@ namespace Scenes.StartMenu.Manager
                 Debug.LogError($"error : {result.ShutdownReason}");
 
                 //ロック解除
-                _button0.interactable = true;
+                foreach (var button in buttonList)
+                {
+                    button.interactable = true;
+                }
             }
         }
     }

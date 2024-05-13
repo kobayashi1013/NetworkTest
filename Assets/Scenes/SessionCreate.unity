@@ -1222,8 +1222,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b5d27c845e1a8249af5eec2dd4de7a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Canvas: {fileID: 80254581}
   _inputField0: {fileID: 322416808}
   _button0: {fileID: 168513122}
+  _dialogPrefab: {fileID: 6573557242661081088, guid: 492f964733c796a4a9e7734741f4e4b0, type: 3}
 --- !u!4 &705509927
 Transform:
   m_ObjectHideFlags: 0
