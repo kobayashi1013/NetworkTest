@@ -1261,9 +1261,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98eaaa6e20e93af48b9bb82ba186dff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Canvas: {fileID: 1494495496}
   _sessionListObj: {fileID: 253872899}
   _sessionDataPrefab: {fileID: -6633067205481185541, guid: 3bc46b8560c0a14468bd1f777c0316a6, type: 3}
-  _button1: {fileID: 1011024888}
+  _dialogPrefab: {fileID: 6573557242661081088, guid: 492f964733c796a4a9e7734741f4e4b0, type: 3}
   _sessionViewPadding: 40
 --- !u!4 &2146310469
 Transform:

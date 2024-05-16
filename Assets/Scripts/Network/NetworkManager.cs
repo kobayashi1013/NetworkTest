@@ -17,8 +17,12 @@ namespace Network
 
         void Awake()
         {
-            Runner = this.gameObject.GetComponent<NetworkRunner>();
-            Instance = this;
+            //インスタンス化
+            if (Runner == null) Runner = this.gameObject.GetComponent<NetworkRunner>();
+            else Destroy(this.gameObject);
+
+            if (Instance == null) Instance = this;
+            else Destroy(this.gameObject);
         }
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }

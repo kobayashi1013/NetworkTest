@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Fusion;
+using Scenes.Lobby.Manager;
 
 namespace Prefab
 {
@@ -23,35 +24,48 @@ namespace Prefab
         //セッションに参加
         public async void PushJoinButton()
         {
-            //ボタンロック
-            var buttonList = FindObjectsOfType<Button>();
-            foreach (var button in buttonList)
+            //セッション存在確認
+            if (Network.NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
+            if (Network.NetworkManager.Instance.updatedSessionList.Exists(x => x.Name == _sessionName)) //存在する
             {
-                button.interactable = false;
-            }
-
-            //セッションに参加
-            var result = await Network.NetworkManager.Runner.StartGame(new StartGameArgs()
-            {
-                GameMode = GameMode.Client,
-                Scene = SceneRef.FromIndex((int)Constant.SceneName.InGameScene),
-                SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
-                SessionName = _sessionName
-            });
-
-            if (result.Ok)
-            {
-                Debug.Log("Client");
-            }
-            else
-            {
-                Debug.LogError($"error : {result.ShutdownReason}");
-
-                //ロック解除
+                //ボタンロック
+                var buttonList = FindObjectsOfType<Button>();
                 foreach (var button in buttonList)
                 {
-                    button.interactable = true;
+                    button.interactable = false;
                 }
+
+                //セッションに参加
+                var result = await Network.NetworkManager.Runner.StartGame(new StartGameArgs()
+                {
+                    GameMode = GameMode.Client,
+                    Scene = SceneRef.FromIndex((int)Constant.SceneName.InGameScene),
+                    SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
+                    SessionName = _sessionName
+                });
+
+                if (result.Ok)
+                {
+                    Debug.Log("Client");
+                }
+                else
+                {
+                    Debug.LogError($"error : {result.ShutdownReason}");
+
+                    //ロック解除
+                    foreach (var button in buttonList)
+                    {
+                        button.interactable = true;
+                    }
+                }
+            }
+            else //セッションは存在しない
+            {
+                Debug.Log("error : SessionNotExisted");
+
+                //表示削除
+                if (LobbyManager.Instance == null) Debug.LogError("error : Not Found LobbyManager");
+                LobbyManager.Instance.NotExistedSession();
             }
         }
     }

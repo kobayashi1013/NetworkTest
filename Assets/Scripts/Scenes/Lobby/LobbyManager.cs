@@ -11,12 +11,21 @@ namespace Scenes.Lobby.Manager
 {
     public class LobbyManager : MonoBehaviour
     {
+        [SerializeField] private GameObject _Canvas;
         [SerializeField] private GameObject _sessionListObj;
         [SerializeField] private Prefab.SessionData _sessionDataPrefab;
+        [SerializeField] private Prefab.Dialog _dialogPrefab;
         [SerializeField] private int _sessionViewPadding = 0;
+
+        public static LobbyManager Instance;
 
         void Awake()
         {
+            //インスタンス化
+            if (Instance == null) Instance = this;
+            else Destroy(this.gameObject);
+
+            //セッション表示更新
             SessionListUpdate();
         }
 
@@ -37,6 +46,7 @@ namespace Scenes.Lobby.Manager
             }
 
             //ロビーから離脱
+            if (Network.NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
             Network.NetworkManager.Runner.Shutdown();
 
             //スタートメニューシーンへ遷移
@@ -59,6 +69,7 @@ namespace Scenes.Lobby.Manager
             }
 
             //セッション描画
+            if (Network.NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
             for (int i = 0; i < Network.NetworkManager.Instance.updatedSessionList.Count; i++)
             {
                 var obj = Instantiate(_sessionDataPrefab);
@@ -66,6 +77,17 @@ namespace Scenes.Lobby.Manager
                 obj.transform.localPosition = new Vector3(0, -1 * i * _sessionViewPadding, 0);
                 obj.Init(Network.NetworkManager.Instance.updatedSessionList[i].Name);
             }
+        }
+
+        //セッションが存在しない
+        public void NotExistedSession()
+        {
+            //ダイアログ表示
+            var obj = Instantiate(_dialogPrefab, _Canvas.transform);
+            obj.Init("not found session");
+
+            //セッションビュー更新
+            SessionListUpdate();
         }
     }
 }

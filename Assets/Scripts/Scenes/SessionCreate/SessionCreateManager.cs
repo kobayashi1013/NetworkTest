@@ -20,9 +20,13 @@ namespace Scenes.LobbyCreate.Manager
         public async void OnButton0()
         {
             //セッション名重複判定
+            if (Network.NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
             if (Network.NetworkManager.Instance.updatedSessionList.Exists(x => x.Name == _inputField0.text)) //失敗
             {
                 Debug.Log("exist name");
+
+                //入力項目初期化
+                _inputField0.text = "";
 
                 //ダイアログ表示
                 var obj = Instantiate(_dialogPrefab, _Canvas.transform);
