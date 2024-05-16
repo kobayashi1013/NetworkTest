@@ -12,10 +12,9 @@ namespace Scenes.Lobby.Manager
     public class LobbyManager : MonoBehaviour
     {
         [SerializeField] private GameObject _Canvas;
-        [SerializeField] private GameObject _sessionListObj;
+        [SerializeField] private GameObject _sessionListContent;
         [SerializeField] private Prefab.SessionData _sessionDataPrefab;
         [SerializeField] private Prefab.Dialog _dialogPrefab;
-        [SerializeField] private int _sessionViewPadding = 0;
 
         public static LobbyManager Instance;
 
@@ -63,7 +62,7 @@ namespace Scenes.Lobby.Manager
         private void SessionListUpdate()
         {
             //ÉZÉbÉVÉáÉìçÌèú
-            foreach (Transform child in _sessionListObj.transform)
+            foreach (Transform child in _sessionListContent.transform)
             {
                 Destroy(child.gameObject);
             }
@@ -72,9 +71,7 @@ namespace Scenes.Lobby.Manager
             if (Network.NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
             for (int i = 0; i < Network.NetworkManager.Instance.updatedSessionList.Count; i++)
             {
-                var obj = Instantiate(_sessionDataPrefab);
-                obj.transform.SetParent(_sessionListObj.transform, false);
-                obj.transform.localPosition = new Vector3(0, -1 * i * _sessionViewPadding, 0);
+                var obj = Instantiate(_sessionDataPrefab, _sessionListContent.transform);
                 obj.Init(Network.NetworkManager.Instance.updatedSessionList[i].Name);
             }
         }
