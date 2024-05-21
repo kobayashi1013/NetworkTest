@@ -5,6 +5,7 @@ namespace Constant
         StartMenuScene,
         LobbyScene,
         SessionCreateScene,
+        PrivateConnectionScene,
         InGameScene,
     }
 }

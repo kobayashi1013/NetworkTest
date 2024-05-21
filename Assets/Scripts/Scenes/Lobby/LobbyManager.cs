@@ -59,6 +59,12 @@ namespace Scenes.Lobby.Manager
             SessionViewUpdate();
         }
 
+        public void OnPrivateConnectionButton()
+        {
+            //プライベート参加シーンへ遷移
+            SceneManager.LoadScene((int)SceneName.PrivateConnectionScene);
+        }
+
         //セッションビューの更新処理
         private void SessionViewUpdate()
         {
@@ -72,8 +78,15 @@ namespace Scenes.Lobby.Manager
             if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
             for (int i = 0; i < NetworkManager.Instance.updatedSessionList.Count; i++)
             {
-                var obj = Instantiate(_sessionDataPrefab, _sessionListContent.transform); //親オブジェクトを設定
-                obj.Init(NetworkManager.Instance.updatedSessionList[i].Name); //情報の受け渡し
+                if (NetworkManager.Instance.updatedSessionList[i].Properties.TryGetValue("visible", out var property))
+                {
+                    bool isVisible = (bool)property.PropertyValue;
+                    if (isVisible) //Publicである
+                    {
+                        var obj = Instantiate(_sessionDataPrefab, _sessionListContent.transform); //親オブジェクトを設定
+                        obj.Init(NetworkManager.Instance.updatedSessionList[i].Name); //情報の受け渡し
+                    }
+                }
             }
         }
 

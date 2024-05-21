@@ -59,7 +59,7 @@ namespace Prefabs
             {
                 Debug.Log("error : SessionNotExisted");
 
-                //表示削除
+                //ダイアログ
                 if (LobbyManager.Instance == null) Debug.LogError("error : Not Found LobbyManager");
                 LobbyManager.Instance.NotExistedSession();
             }

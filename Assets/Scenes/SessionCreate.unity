@@ -308,7 +308,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lobby Name
+  m_text: Session Name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1224,6 +1224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvas: {fileID: 80254581}
   _sessionNameInputField: {fileID: 322416808}
+  _isVisibleToggle: {fileID: 1874725037}
   _playButton: {fileID: 168513122}
   _backButton: {fileID: 483370263}
   _dialogPrefab: {fileID: 6573557242661081088, guid: 492f964733c796a4a9e7734741f4e4b0, type: 3}
@@ -1743,7 +1744,7 @@ GameObject:
   - component: {fileID: 1874725036}
   - component: {fileID: 1874725037}
   m_Layer: 5
-  m_Name: PrivateChange
+  m_Name: IsVisibleToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

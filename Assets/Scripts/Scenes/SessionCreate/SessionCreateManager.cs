@@ -16,6 +16,7 @@ namespace Scenes.LobbyCreate.Manager
         [Header("Scene Objects")]
         [SerializeField] private GameObject _canvas;
         [SerializeField] private TMP_InputField _sessionNameInputField;
+        [SerializeField] private Toggle _isVisibleToggle;
         [SerializeField] private Button _playButton;
         [SerializeField] private Button _backButton;
         [Header("Prefabs")]
@@ -44,6 +45,10 @@ namespace Scenes.LobbyCreate.Manager
                 //ボタンロック
                 AllButtonLock();
 
+                //カスタムプロパティ
+                var customProps = new Dictionary<string, SessionProperty>();
+                customProps["visible"] = !_isVisibleToggle.isOn; //可視・不可視
+
                 //セッション作成
                 var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
                 {
@@ -51,7 +56,8 @@ namespace Scenes.LobbyCreate.Manager
                     Scene = SceneRef.FromIndex((int)SceneName.InGameScene), //次のゲームシーンの選択
                     SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のSceneManagerの指定
                     SessionName = _sessionNameInputField.text, //セッション名の決定
-                    PlayerCount = _maxPlayer //最大人数の決定
+                    SessionProperties = customProps,
+                    PlayerCount = _maxPlayer, //最大人数の決定
                 });
 
                 if (result.Ok)
