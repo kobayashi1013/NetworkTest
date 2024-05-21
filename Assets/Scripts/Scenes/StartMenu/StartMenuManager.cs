@@ -4,22 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Fusion;
+using Constant;
 
 namespace Scenes.StartMenu.Manager
 {
     public class StartMenuManager : MonoBehaviour
     {
+        [Header("Scene Objects")]
+        [SerializeField] private Button _lobbyButton;
+        [Header("Prefabs")]
         [SerializeField] private NetworkRunner _networkRunnerPrefab;
 
         //ロビーへの参加
-        public async void OnButton0()
+        public async void OnLobbyButton()
         {
             //ボタンロック
-            var buttonList = FindObjectsOfType<Button>();
-            foreach (var button in buttonList)
-            {
-                button.interactable = false;
-            }
+            AllButtonLock();
 
             //NetworkRunnerの起動
             var networkRunner = Instantiate(_networkRunnerPrefab);
@@ -34,18 +34,27 @@ namespace Scenes.StartMenu.Manager
                 Debug.Log("JoinLobby");
 
                 //ロビーシーンへ遷移
-                SceneManager.LoadScene((int)Constant.SceneName.LobbyScene);
+                SceneManager.LoadScene((int)SceneName.LobbyScene);
             }
             else
             {
                 Debug.LogError($"error : {result.ShutdownReason}");
 
                 //ロック解除
-                foreach (var button in buttonList)
-                {
-                    button.interactable = true;
-                }
+                AllButtonRelease();
             }
+        }
+
+        //全てのボタンをロック
+        private void AllButtonLock()
+        {
+            _lobbyButton.interactable = false;
+        }
+
+        //全てのボタンをロック解除
+        private void AllButtonRelease()
+        {
+            _lobbyButton.interactable = true;
         }
     }
 }

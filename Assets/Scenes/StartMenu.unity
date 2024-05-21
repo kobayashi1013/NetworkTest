@@ -347,8 +347,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f4a2e1fd9409724ea4edb6773450a88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lobbyButton: {fileID: 1894620001}
   _networkRunnerPrefab: {fileID: 7876573081687707972, guid: a1e9b062346b6ac40a320aafdb600002, type: 3}
-  _button0: {fileID: 1894620001}
 --- !u!4 &837996402
 Transform:
   m_ObjectHideFlags: 0
@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 1894620002}
   - component: {fileID: 1894620001}
   m_Layer: 5
-  m_Name: Button0
+  m_Name: LobbyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -518,7 +518,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 837996401}
         m_TargetAssemblyTypeName: Scenes.StartMenu.Manager.StartMenuManager, Assembly-CSharp
-        m_MethodName: OnButton0
+        m_MethodName: OnLobbyButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

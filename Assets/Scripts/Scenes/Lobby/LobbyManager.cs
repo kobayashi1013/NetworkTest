@@ -6,15 +6,20 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Fusion;
+using Network;
+using Prefabs;
+using Constant;
 
 namespace Scenes.Lobby.Manager
 {
     public class LobbyManager : MonoBehaviour
     {
-        [SerializeField] private GameObject _Canvas;
+        [Header("Scene Objects")]
+        [SerializeField] private GameObject _canvas;
         [SerializeField] private GameObject _sessionListContent;
-        [SerializeField] private Prefab.SessionData _sessionDataPrefab;
-        [SerializeField] private Prefab.Dialog _dialogPrefab;
+        [Header("Prefabs")]
+        [SerializeField] private SessionData _sessionDataPrefab;
+        [SerializeField] private Dialog _dialogPrefab;
 
         public static LobbyManager Instance;
 
@@ -25,41 +30,37 @@ namespace Scenes.Lobby.Manager
             else Destroy(this.gameObject);
 
             //セッション表示更新
-            SessionListUpdate();
+            SessionViewUpdate();
         }
 
         //Create Session
-        public void OnButton0()
+        public void OnCreateSessionButton()
         {
-            SceneManager.LoadScene((int)Constant.SceneName.SessionCreateScene);
+            SceneManager.LoadScene((int)SceneName.SessionCreateScene);
         }
 
         //Back
-        public void OnButton1()
+        public void OnBackButton()
         {
-            //ボタンロック
-            var buttonList = FindObjectsOfType<Button>();
-            foreach (var button in buttonList)
-            {
-                button.interactable = false;
-            }
+            //全ボタンロック
+            AllButtonLock();
 
             //ロビーから離脱
-            if (Network.NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
-            Network.NetworkManager.Runner.Shutdown();
+            if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
+            NetworkManager.Runner.Shutdown();
 
             //スタートメニューシーンへ遷移
-            SceneManager.LoadScene((int)Constant.SceneName.StartMenuScene);
+            SceneManager.LoadScene((int)SceneName.StartMenuScene);
         }
 
         //セッションビューの更新
-        public void OnButton2()
+        public void OnUpdateButton()
         {
-            SessionListUpdate();
+            SessionViewUpdate();
         }
 
         //セッションビューの更新処理
-        private void SessionListUpdate()
+        private void SessionViewUpdate()
         {
             //セッション削除
             foreach (Transform child in _sessionListContent.transform)
@@ -68,11 +69,11 @@ namespace Scenes.Lobby.Manager
             }
 
             //セッション描画
-            if (Network.NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
-            for (int i = 0; i < Network.NetworkManager.Instance.updatedSessionList.Count; i++)
+            if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
+            for (int i = 0; i < NetworkManager.Instance.updatedSessionList.Count; i++)
             {
-                var obj = Instantiate(_sessionDataPrefab, _sessionListContent.transform);
-                obj.Init(Network.NetworkManager.Instance.updatedSessionList[i].Name);
+                var obj = Instantiate(_sessionDataPrefab, _sessionListContent.transform); //親オブジェクトを設定
+                obj.Init(NetworkManager.Instance.updatedSessionList[i].Name); //情報の受け渡し
             }
         }
 
@@ -80,11 +81,31 @@ namespace Scenes.Lobby.Manager
         public void NotExistedSession()
         {
             //ダイアログ表示
-            var obj = Instantiate(_dialogPrefab, _Canvas.transform);
+            var obj = Instantiate(_dialogPrefab, _canvas.transform);
             obj.Init("not found session");
 
             //セッションビュー更新
-            SessionListUpdate();
+            SessionViewUpdate();
+        }
+
+        //全てのボタンをロック
+        public void AllButtonLock()
+        {
+            var allButtonList = FindObjectsOfType<Button>();
+            foreach (var button in allButtonList)
+            {
+                button.interactable = false;
+            }
+        }
+
+        //全てのボタンをロック解除
+        public void AllButtonRelease()
+        {
+            var allButtonList = FindObjectsOfType<Button>();
+            foreach (var button in allButtonList)
+            {
+                button.interactable = true;
+            }
         }
     }
 }

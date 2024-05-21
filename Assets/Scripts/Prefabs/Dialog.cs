@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace Prefab
+namespace Prefabs
 {
     public class Dialog : MonoBehaviour
     {
+        [Header("Prefab Objects")]
         [SerializeField] private TMP_Text _messageTMP;
 
         private string _message;
@@ -20,7 +21,7 @@ namespace Prefab
         }
 
         //Close
-        public void PushCloseButton()
+        public void OnCloseButton()
         {
             Destroy(this.gameObject);
         }

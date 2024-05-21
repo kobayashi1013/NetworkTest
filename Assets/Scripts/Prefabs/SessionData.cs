@@ -5,11 +5,14 @@ using UnityEngine.UI;
 using TMPro;
 using Fusion;
 using Scenes.Lobby.Manager;
+using Network;
+using Constant;
 
-namespace Prefab
+namespace Prefabs
 {
     public class SessionData : MonoBehaviour
     {
+        [Header("Scene Objects")]
         [SerializeField] private TMP_Text _sessionNameTMP;
 
         private string _sessionName = "";
@@ -22,24 +25,20 @@ namespace Prefab
         }
 
         //セッションに参加
-        public async void PushJoinButton()
+        public async void OnJoinButton()
         {
             //セッション存在確認
-            if (Network.NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
-            if (Network.NetworkManager.Instance.updatedSessionList.Exists(x => x.Name == _sessionName)) //存在する
+            if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
+            if (NetworkManager.Instance.updatedSessionList.Exists(x => x.Name == _sessionName)) //存在する
             {
                 //ボタンロック
-                var buttonList = FindObjectsOfType<Button>();
-                foreach (var button in buttonList)
-                {
-                    button.interactable = false;
-                }
+                LobbyManager.Instance.AllButtonLock();
 
                 //セッションに参加
-                var result = await Network.NetworkManager.Runner.StartGame(new StartGameArgs()
+                var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
                 {
                     GameMode = GameMode.Client,
-                    Scene = SceneRef.FromIndex((int)Constant.SceneName.InGameScene),
+                    Scene = SceneRef.FromIndex((int)SceneName.InGameScene),
                     SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
                     SessionName = _sessionName
                 });
@@ -53,10 +52,7 @@ namespace Prefab
                     Debug.LogError($"error : {result.ShutdownReason}");
 
                     //ロック解除
-                    foreach (var button in buttonList)
-                    {
-                        button.interactable = true;
-                    }
+                    LobbyManager.Instance.AllButtonRelease();
                 }
             }
             else //セッションは存在しない

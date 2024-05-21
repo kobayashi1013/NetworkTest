@@ -244,7 +244,7 @@ Transform:
   - {fileID: 745832656936631795}
   - {fileID: 5921996570822608077}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6573557242661081088
 MonoBehaviour:
@@ -382,8 +382,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6573557242661081088}
-        m_TargetAssemblyTypeName: Prefab.Dialog, Assembly-CSharp
-        m_MethodName: PushCloseButton
+        m_TargetAssemblyTypeName: Prefabs.Dialog, Assembly-CSharp
+        m_MethodName: OnCloseButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

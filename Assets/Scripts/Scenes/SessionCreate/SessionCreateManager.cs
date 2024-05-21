@@ -5,49 +5,52 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Fusion;
+using Prefabs;
+using Network;
+using Constant;
 
 namespace Scenes.LobbyCreate.Manager
 {
     public class SessionCreateManager : MonoBehaviour
     {
-        private const int _maxPlayer = 2; //二人ゲーム
-
-        [SerializeField] private GameObject _Canvas;
-        [SerializeField] private TMP_InputField _inputField0;
-        [SerializeField] private Prefab.Dialog _dialogPrefab;
+        [Header("Scene Objects")]
+        [SerializeField] private GameObject _canvas;
+        [SerializeField] private TMP_InputField _sessionNameInputField;
+        [SerializeField] private Button _playButton;
+        [SerializeField] private Button _backButton;
+        [Header("Prefabs")]
+        [SerializeField] private Dialog _dialogPrefab;
+        [Header("Parameters")]
+        [SerializeField] private int _maxPlayer = 2;
 
         //セッション作成
-        public async void OnButton0()
+        public async void OnPlayButton()
         {
             //セッション名重複判定
-            if (Network.NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
-            if (Network.NetworkManager.Instance.updatedSessionList.Exists(x => x.Name == _inputField0.text)) //失敗
+            if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
+            if (NetworkManager.Instance.updatedSessionList.Exists(x => x.Name == _sessionNameInputField.text)) //失敗
             {
                 Debug.Log("exist name");
 
                 //入力項目初期化
-                _inputField0.text = "";
+                _sessionNameInputField.text = "";
 
                 //ダイアログ表示
-                var obj = Instantiate(_dialogPrefab, _Canvas.transform);
+                var obj = Instantiate(_dialogPrefab, _canvas.transform);
                 obj.Init("existed name");
             }
             else //成功
             {
                 //ボタンロック
-                var buttonList = FindObjectsOfType<Button>();
-                foreach (var button in buttonList)
-                {
-                    button.interactable = false;
-                }
+                AllButtonLock();
 
                 //セッション作成
-                var result = await Network.NetworkManager.Runner.StartGame(new StartGameArgs()
+                var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
                 {
                     GameMode = GameMode.Host, //ゲームでの権限
-                    Scene = SceneRef.FromIndex((int)Constant.SceneName.InGameScene), //次のゲームシーンの選択
+                    Scene = SceneRef.FromIndex((int)SceneName.InGameScene), //次のゲームシーンの選択
                     SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のSceneManagerの指定
-                    SessionName = _inputField0.text, //セッション名の決定
+                    SessionName = _sessionNameInputField.text, //セッション名の決定
                     PlayerCount = _maxPlayer //最大人数の決定
                 });
 
@@ -60,18 +63,29 @@ namespace Scenes.LobbyCreate.Manager
                     Debug.LogError($"error : {result.ShutdownReason}");
 
                     //ロック解除
-                    foreach (var button in buttonList)
-                    {
-                        button.interactable = true;
-                    }
+                    AllButtonRelease();
                 }
             }
         }
 
         //Back
-        public void OnButton1()
+        public void OnBackButton()
         {
-            SceneManager.LoadScene((int)Constant.SceneName.LobbyScene);
+            SceneManager.LoadScene((int)SceneName.LobbyScene);
+        }
+
+        //全てのボタンをロック
+        private void AllButtonLock()
+        {
+            _playButton.interactable = false;
+            _backButton.interactable = false;
+        }
+
+        //全てのボタンを解除
+        private void AllButtonRelease()
+        {
+            _playButton.interactable = true;
+            _backButton.interactable = true;
         }
     }
 }
