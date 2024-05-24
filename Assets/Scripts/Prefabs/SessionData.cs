@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -14,54 +15,68 @@ namespace Prefabs
     {
         [Header("Scene Objects")]
         [SerializeField] private TMP_Text _sessionNameTMP;
+        [SerializeField] private TMP_Text _sessionPlayerCountTMP;
 
-        private string _sessionName = "";
+        private SessionInfo _sessionInfo;
 
         //初期化
-        public void Init(string name)
+        public void Init(SessionInfo sessionInfo)
         {
-            _sessionName = name;
-            _sessionNameTMP.text = name;
+            _sessionInfo = sessionInfo;
+
+            _sessionNameTMP.text = _sessionInfo.Name;
+            _sessionPlayerCountTMP.text = _sessionInfo.PlayerCount.ToString() + "/" + _sessionInfo.MaxPlayers.ToString();
         }
 
         //セッションに参加
         public async void OnJoinButton()
         {
-            //セッション存在確認
             if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
-            if (NetworkManager.Instance.updatedSessionList.Exists(x => x.Name == _sessionName)) //存在する
-            {
-                //ボタンロック
-                LobbyManager.Instance.AllButtonLock();
+            if (LobbyManager.Instance == null) Debug.LogError("error : Not Found LobbyManager");
 
-                //セッションに参加
-                var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
-                {
-                    GameMode = GameMode.Client,
-                    Scene = SceneRef.FromIndex((int)SceneName.InGameScene),
-                    SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
-                    SessionName = _sessionName
-                });
+            //セッション最新情報取得
+            var sessionInfo = NetworkManager.Instance.updatedSessionList.FirstOrDefault(x => x.Name == _sessionInfo.Name);
 
-                if (result.Ok)
-                {
-                    Debug.Log("Client");
-                }
-                else
-                {
-                    Debug.LogError($"error : {result.ShutdownReason}");
-
-                    //ロック解除
-                    LobbyManager.Instance.AllButtonRelease();
-                }
-            }
-            else //セッションは存在しない
+            //セッション存在確認
+            if (sessionInfo == null)
             {
                 Debug.Log("error : SessionNotExisted");
+                LobbyManager.Instance.NotExistedSession(); //ダイアログ
 
-                //ダイアログ
-                if (LobbyManager.Instance == null) Debug.LogError("error : Not Found LobbyManager");
-                LobbyManager.Instance.NotExistedSession();
+                return;
+            }
+
+            //セッションが満員
+            if (sessionInfo.PlayerCount == sessionInfo.MaxPlayers)
+            {
+                Debug.Log("error : SessionPlayer is Max");
+                LobbyManager.Instance.SessionPlayerMax();
+
+                return;
+            }
+
+            //ボタンロック
+            LobbyManager.Instance.AllButtonLock();
+
+            //セッションに参加
+            var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
+            {
+                GameMode = GameMode.Client,
+                Scene = SceneRef.FromIndex((int)SceneName.InGameScene),
+                SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
+                SessionName = _sessionInfo.Name
+            });
+
+            if (result.Ok)
+            {
+                Debug.Log("Client");
+            }
+            else
+            {
+                Debug.LogError($"error : {result.ShutdownReason}");
+
+                //ロック解除
+                LobbyManager.Instance.AllButtonRelease();
             }
         }
     }

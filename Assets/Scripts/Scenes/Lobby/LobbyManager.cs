@@ -17,11 +17,13 @@ namespace Scenes.Lobby.Manager
         [Header("Scene Objects")]
         [SerializeField] private GameObject _canvas;
         [SerializeField] private GameObject _sessionListContent;
+        [SerializeField] private TMP_Text _lobbyPlayersTMP;
         [Header("Prefabs")]
         [SerializeField] private SessionData _sessionDataPrefab;
         [SerializeField] private Dialog _dialogPrefab;
 
         public static LobbyManager Instance;
+        private int _lobbyPlayers = 0; //ロビーの人数
 
         void Awake()
         {
@@ -68,6 +70,11 @@ namespace Scenes.Lobby.Manager
         //セッションビューの更新処理
         private void SessionViewUpdate()
         {
+            if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
+
+            //ロビーの人数を初期化
+            _lobbyPlayers = 0;
+
             //セッション削除
             foreach (Transform child in _sessionListContent.transform)
             {
@@ -75,19 +82,28 @@ namespace Scenes.Lobby.Manager
             }
 
             //セッション描画
-            if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
             for (int i = 0; i < NetworkManager.Instance.updatedSessionList.Count; i++)
             {
-                if (NetworkManager.Instance.updatedSessionList[i].Properties.TryGetValue("visible", out var property))
+                //セッション最新情報取得
+                var sessionInfo = NetworkManager.Instance.updatedSessionList[i];
+
+                //ロビー人数カウント
+                _lobbyPlayers += sessionInfo.PlayerCount;
+
+                //セッション表示
+                if (sessionInfo.Properties.TryGetValue("visible", out var property))
                 {
                     bool isVisible = (bool)property.PropertyValue;
                     if (isVisible) //Publicである
                     {
                         var obj = Instantiate(_sessionDataPrefab, _sessionListContent.transform); //親オブジェクトを設定
-                        obj.Init(NetworkManager.Instance.updatedSessionList[i].Name); //情報の受け渡し
+                        obj.Init(sessionInfo); //情報の受け渡し
                     }
                 }
             }
+
+            //ロビー人数表示
+            _lobbyPlayersTMP.text = _lobbyPlayers.ToString();
         }
 
         //セッションが存在しない
@@ -96,6 +112,16 @@ namespace Scenes.Lobby.Manager
             //ダイアログ表示
             var obj = Instantiate(_dialogPrefab, _canvas.transform);
             obj.Init("not found session");
+
+            //セッションビュー更新
+            SessionViewUpdate();
+        }
+
+        //セッション人数が上限
+        public void SessionPlayerMax()
+        {
+            var obj = Instantiate(_dialogPrefab, _canvas.transform);
+            obj.Init("session is full");
 
             //セッションビュー更新
             SessionViewUpdate();

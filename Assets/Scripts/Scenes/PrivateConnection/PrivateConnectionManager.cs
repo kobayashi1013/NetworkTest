@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -24,35 +25,13 @@ namespace Scenes.PrivateConnection.Manager
         //セッション参加
         public async void OnJoinButton()
         {
-            //セッション存在判定
             if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
-            if (NetworkManager.Instance.updatedSessionList.Exists(x => x.Name == _sessionNameInputField.text)) //成功
-            {
-                //ボタンロック
-                AllButtonLock();
 
-                //セッションに参加
-                var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
-                {
-                    GameMode = GameMode.Client,
-                    Scene = SceneRef.FromIndex((int)SceneName.InGameScene),
-                    SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
-                    SessionName = _sessionNameInputField.text
-                });
+            //セッション最新情報取得
+            var sessionInfo = NetworkManager.Instance.updatedSessionList.FirstOrDefault(x => x.Name == _sessionNameInputField.text);
 
-                if (result.Ok)
-                {
-                    Debug.Log("Client");
-                }
-                else
-                {
-                    Debug.LogError($"error : {result.ShutdownReason}");
-
-                    //ロック解除
-                    AllButtonRelease();
-                }
-            }
-            else //セッションは存在しない
+            //セッション存在確認
+            if (sessionInfo == null)
             {
                 Debug.Log("error : SessionNotExisted");
 
@@ -62,6 +41,47 @@ namespace Scenes.PrivateConnection.Manager
                 //ダイアログ表示
                 var obj = Instantiate(_dialogPrefab, _canvas.transform);
                 obj.Init("not found session");
+
+                return;
+            }
+
+            //セッションが満員
+            if (sessionInfo.PlayerCount == sessionInfo.MaxPlayers)
+            {
+                Debug.Log("error : SessionPlayer is Max");
+
+                //入力項目初期化
+                _sessionNameInputField.text = "";
+
+                //ダイアログ表示
+                var obj = Instantiate(_dialogPrefab, _canvas.transform);
+                obj.Init("session is full");
+
+                return;
+            }
+
+            //ボタンロック
+            AllButtonLock();
+
+            //セッションに参加
+            var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
+            {
+                GameMode = GameMode.Client,
+                Scene = SceneRef.FromIndex((int)SceneName.InGameScene),
+                SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
+                SessionName = _sessionNameInputField.text
+            });
+
+            if (result.Ok)
+            {
+                Debug.Log("Client");
+            }
+            else
+            {
+                Debug.LogError($"error : {result.ShutdownReason}");
+
+                //ロック解除
+                AllButtonRelease();
             }
         }
 
