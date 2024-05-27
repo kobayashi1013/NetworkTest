@@ -23,12 +23,15 @@ namespace Scenes.LobbyCreate.Manager
         [SerializeField] private Dialog _dialogPrefab;
         [Header("Parameters")]
         [SerializeField] private int _maxPlayer = 2;
+        [SerializeField] private int _sessionNameMin = 1;
+        [SerializeField] private int _sessionNameMax = 12;
 
         //セッション作成
         public async void OnPlayButton()
         {
-            //セッション名重複判定
             if (NetworkManager.Instance == null) Debug.LogError("error : Not Found Runner");
+
+            //セッション名重複判定
             if (NetworkManager.Instance.updatedSessionList.Exists(x => x.Name == _sessionNameInputField.text)) //失敗
             {
                 Debug.Log("exist name");
@@ -39,38 +42,54 @@ namespace Scenes.LobbyCreate.Manager
                 //ダイアログ表示
                 var obj = Instantiate(_dialogPrefab, _canvas.transform);
                 obj.Init("existed name");
+
+                return;
             }
-            else //成功
+
+            //文字数制限
+            if (_sessionNameInputField.text.Length < _sessionNameMin ||
+                _sessionNameInputField.text.Length > _sessionNameMax)
             {
-                //ボタンロック
-                AllButtonLock();
+                Debug.Log("word count error");
 
-                //カスタムプロパティ
-                var customProps = new Dictionary<string, SessionProperty>();
-                customProps["visible"] = !_isVisibleToggle.isOn; //可視・不可視
+                //入力項目初期化
+                _sessionNameInputField.text = "";
 
-                //セッション作成
-                var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
-                {
-                    GameMode = GameMode.Host, //ゲームでの権限
-                    Scene = SceneRef.FromIndex((int)SceneName.InGameScene), //次のゲームシーンの選択
-                    SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のSceneManagerの指定
-                    SessionName = _sessionNameInputField.text, //セッション名の決定
-                    SessionProperties = customProps,
-                    PlayerCount = _maxPlayer, //最大人数の決定
-                });
+                //ダイアログ表示
+                var obj = Instantiate(_dialogPrefab, _canvas.transform);
+                obj.Init("word count error");
 
-                if (result.Ok)
-                {
-                    Debug.Log("Host");
-                }
-                else
-                {
-                    Debug.LogError($"error : {result.ShutdownReason}");
+                return;
+            }
 
-                    //ロック解除
-                    AllButtonRelease();
-                }
+            //ボタンロック
+            AllButtonLock();
+
+            //カスタムプロパティ
+            var customProps = new Dictionary<string, SessionProperty>();
+            customProps["visible"] = !_isVisibleToggle.isOn; //可視・不可視
+
+            //セッション作成
+            var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
+            {
+                GameMode = GameMode.Host, //ゲームでの権限
+                Scene = SceneRef.FromIndex((int)SceneName.InGameScene), //次のゲームシーンの選択
+                SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のSceneManagerの指定
+                SessionName = _sessionNameInputField.text, //セッション名の決定
+                SessionProperties = customProps,
+                PlayerCount = _maxPlayer, //最大人数の決定
+            });
+
+            if (result.Ok)
+            {
+                Debug.Log("Host");
+            }
+            else
+            {
+                Debug.LogError($"error : {result.ShutdownReason}");
+
+                //ロック解除
+                AllButtonRelease();
             }
         }
 

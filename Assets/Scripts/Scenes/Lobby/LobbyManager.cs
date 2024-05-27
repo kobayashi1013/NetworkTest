@@ -94,7 +94,7 @@ namespace Scenes.Lobby.Manager
                 if (sessionInfo.Properties.TryGetValue("visible", out var property))
                 {
                     bool isVisible = (bool)property.PropertyValue;
-                    if (isVisible) //Publicである
+                    if (isVisible && sessionInfo.PlayerCount != sessionInfo.MaxPlayers) //Publicである
                     {
                         var obj = Instantiate(_sessionDataPrefab, _sessionListContent.transform); //親オブジェクトを設定
                         obj.Init(sessionInfo); //情報の受け渡し
