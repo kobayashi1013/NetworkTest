@@ -21,6 +21,7 @@ namespace Scenes.Lobby.Manager
         [Header("Prefabs")]
         [SerializeField] private SessionData _sessionDataPrefab;
         [SerializeField] private Dialog _dialogPrefab;
+        [SerializeField] private ToSoloModeDialog _toSoloModeDialogPrefab;
 
         public static LobbyManager Instance;
         private int _lobbyPlayers = 0; //ロビーの人数
@@ -120,7 +121,7 @@ namespace Scenes.Lobby.Manager
         //セッション人数が上限
         public void SessionPlayerMax()
         {
-            var obj = Instantiate(_dialogPrefab, _canvas.transform);
+            var obj = Instantiate(_toSoloModeDialogPrefab, _canvas.transform);
             obj.Init("session is full");
 
             //セッションビュー更新

@@ -7,5 +7,6 @@ namespace Constant
         SessionCreateScene,
         PrivateConnectionScene,
         InGameScene,
+        InGameSoloScene,
     }
 }

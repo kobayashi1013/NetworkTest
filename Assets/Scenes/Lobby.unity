@@ -2077,6 +2077,7 @@ MonoBehaviour:
   _lobbyPlayersTMP: {fileID: 914376059}
   _sessionDataPrefab: {fileID: 1059697157164800202, guid: 859f5866334bb1f438dcc7a815f4dc69, type: 3}
   _dialogPrefab: {fileID: 6573557242661081088, guid: 492f964733c796a4a9e7734741f4e4b0, type: 3}
+  _toSoloModeDialogPrefab: {fileID: 6821454362280451335, guid: ba7df21107c00c049b7ffb10451ae335, type: 3}
 --- !u!4 &2146310469
 Transform:
   m_ObjectHideFlags: 0
