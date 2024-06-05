@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Scenes
+namespace Utils
 {
     public class UserInfo
     {
-        public static UserInfo Instance;
+        public static UserInfo MyInfo;
 
         public string username; //ÉÜÅ[ÉUÅ[ñº
 

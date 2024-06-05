@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Fusion;
 using Constant;
-using Scenes;
+using Utils;
 
 namespace Scenes.StartMenu.Manager
 {
@@ -19,7 +19,10 @@ namespace Scenes.StartMenu.Manager
         void Awake()
         {
             //ゲーム設定
-            UserInfo.Instance = new UserInfo("user01");
+            if (UserInfo.MyInfo == null)
+            {
+                UserInfo.MyInfo = new UserInfo(Random.Range(0, 100).ToString());
+            }
         }
 
         //ロビーへの参加
