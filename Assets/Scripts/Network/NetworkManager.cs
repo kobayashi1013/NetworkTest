@@ -16,7 +16,6 @@ namespace Network
         public static NetworkManager Instance;
 
         public List<SessionInfo> updatedSessionList = new List<SessionInfo>(); //セッションリスト(off-line)
-        //public Dictionary<PlayerRef, UserInfo> userInfoList = new Dictionary<PlayerRef, UserInfo>(); //ユーザー情報リスト
 
         void Awake()
         {
@@ -30,13 +29,6 @@ namespace Network
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
-            //自分
-            /*if (runner.LocalPlayer == player)
-            {
-                //ユーザー情報送信
-                PostUserInfo(player, UserInfo.MyInfo.username);
-            }*/
-
             //ホスト
             if (runner.IsServer)
             {
@@ -70,15 +62,5 @@ namespace Network
         public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
         public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
         public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
-
-        //ユーザー情報送信
-        /*[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-        private void PostUserInfo(PlayerRef player, string username)
-        {
-            Debug.Log("Get : PostUserInfo(" + player + ", " + username + ")");
-
-            var userInfo = new UserInfo(username);
-            userInfoList.Add(player, userInfo);
-        }*/
     }
 }
