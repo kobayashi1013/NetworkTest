@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Fusion;
 using Constant;
+using Scenes;
 
 namespace Scenes.StartMenu.Manager
 {
@@ -14,6 +15,12 @@ namespace Scenes.StartMenu.Manager
         [SerializeField] private Button _lobbyButton;
         [Header("Prefabs")]
         [SerializeField] private NetworkRunner _networkRunnerPrefab;
+
+        void Awake()
+        {
+            //ゲーム設定
+            UserInfo.Instance = new UserInfo("user01");
+        }
 
         //ロビーへの参加
         public async void OnLobbyButton()
