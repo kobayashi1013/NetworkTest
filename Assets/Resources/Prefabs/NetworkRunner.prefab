@@ -73,4 +73,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inGameMulti1Manager: {fileID: 8560609136462584702, guid: 23887a3652f6c994eb59a1289aaa0421, type: 3}
+  _inGameMulti2Manager: {fileID: 4004815208656766733, guid: dc938466ccbbc6746a22aa17deb136ea, type: 3}
   _playerPrefab: {fileID: 846832714854066225, guid: f7eacd31ba2a4fe4fa7654e740467caf, type: 3}
