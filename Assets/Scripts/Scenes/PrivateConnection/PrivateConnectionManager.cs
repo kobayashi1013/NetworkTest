@@ -67,7 +67,7 @@ namespace Scenes.PrivateConnection.Manager
             var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
             {
                 GameMode = GameMode.Client,
-                Scene = SceneRef.FromIndex((int)SceneName.InGameScene),
+                Scene = SceneRef.FromIndex((int)SceneName.InGameMulti1),
                 SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
                 SessionName = _sessionNameInputField.text
             });

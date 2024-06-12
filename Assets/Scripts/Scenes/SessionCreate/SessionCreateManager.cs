@@ -73,7 +73,7 @@ namespace Scenes.LobbyCreate.Manager
             var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
             {
                 GameMode = GameMode.Host, //ゲームでの権限
-                Scene = SceneRef.FromIndex((int)SceneName.InGameScene), //次のゲームシーンの選択
+                Scene = SceneRef.FromIndex((int)SceneName.InGameMulti1), //次のゲームシーンの選択
                 SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のSceneManagerの指定
                 SessionName = _sessionNameInputField.text, //セッション名の決定
                 SessionProperties = customProps,

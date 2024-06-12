@@ -6,12 +6,17 @@ using UnityEngine.SceneManagement;
 using Fusion;
 using Fusion.Sockets;
 using Utils;
+using Constant;
 
 namespace Network
 {
     public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
+        [Header("SceneManagers")]
+        [SerializeField] private GameObject _inGameMulti1Manager;
+        [Header("Prefabs")]
         [SerializeField] private GameObject _playerPrefab;
+
         public static NetworkRunner Runner;
         public static NetworkManager Instance;
 
@@ -56,7 +61,19 @@ namespace Network
 
         public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
         public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
-        public void OnSceneLoadDone(NetworkRunner runner) { }
+
+        public void OnSceneLoadDone(NetworkRunner runner)
+        {
+            //ÉzÉXÉgå†å¿
+            if (runner.IsServer)
+            {
+                if (SceneManager.GetActiveScene().buildIndex == (int)SceneName.InGameMulti1)
+                {
+                    runner.Spawn(_inGameMulti1Manager, Vector3.zero, Quaternion.identity);
+                }
+            }
+        }
+
         public void OnSceneLoadStart(NetworkRunner runner) { }
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
         public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
