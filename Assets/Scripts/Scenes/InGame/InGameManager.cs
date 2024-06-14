@@ -7,11 +7,14 @@ using TMPro;
 using UniRx;
 using System;
 using System.Diagnostics;
+using Fusion;
 
 namespace Scenes.InGame.Manager
 {
-    public class InGameManager : MonoBehaviour
+    public class InGameManager : NetworkBehaviour
     {
+        [SerializeField]
+        StickSpawner stickSpawner;
         BallSpawner _ballSpawner;
         BallStatus _ballStatus;
         StickStatus _stickStatus;
@@ -35,6 +38,12 @@ namespace Scenes.InGame.Manager
                 Destroy(gameObject);
             }
         }
+
+        /*public override void Spawned()
+        {
+            UnityEngine.Debug.Log("a");
+            stickSpawner.SpawnPlayers(Runner);
+        }*/
         void Start()
         {
             _ballSpawner = GetComponent<BallSpawner>();

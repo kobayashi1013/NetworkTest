@@ -14,6 +14,11 @@ namespace Scenes.InGame.Stick
 
         private bool _isMovable = true;//スティックが移動できるかどうかのパラメータです
         public bool IsMovable { get => _isMovable; }//他のスクリプトから_isMovableの値を参照したい場合はこの関数を使います
+
+        private void Update()
+        {
+            Debug.Log(_isMovable);
+        }
         public void StopMove()
         {
             _isMovable = false;
