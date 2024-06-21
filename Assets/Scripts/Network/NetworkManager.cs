@@ -13,8 +13,8 @@ namespace Network
     public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         [Header("SceneManagers")]
-        [SerializeField] private GameObject _inGameMulti1Manager;
-        [SerializeField] private GameObject _inGameMulti2Manager;
+        [SerializeField] private GameObject _inLobbyMultiManager;
+        [SerializeField] private GameObject _inGameMultiManager;
         [Header("Prefabs")]
         [SerializeField] private GameObject _playerPrefab;
 
@@ -39,9 +39,9 @@ namespace Network
             //ホスト権限
             if (runner.IsServer)
             {
-                //プレイヤー生成
-                NetworkObject networkObj = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
-                playerList.Add(player, networkObj);
+                //プレイヤー登録
+                runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+                playerList.Add(player, null);
             }
         }
 
@@ -83,13 +83,13 @@ namespace Network
             //ホスト権限
             if (runner.IsServer)
             {
-                if (SceneManager.GetActiveScene().buildIndex == (int)SceneName.InGameMulti1)
+                if (SceneManager.GetActiveScene().buildIndex == (int)SceneName.InLobbyMultiScene)
                 {
-                    runner.Spawn(_inGameMulti1Manager, Vector3.zero, Quaternion.identity);
+                    runner.Spawn(_inLobbyMultiManager, Vector3.zero, Quaternion.identity);
                 }
-                else if (SceneManager.GetActiveScene().buildIndex == (int)SceneName.InGameMulti2)
+                else if (SceneManager.GetActiveScene().buildIndex == (int)SceneName.InGameMultiScene)
                 {
-                    runner.Spawn(_inGameMulti2Manager, Vector3.zero, Quaternion.identity);
+                    runner.Spawn(_inGameMultiManager, Vector3.zero, Quaternion.identity);
                 }
             }
         }

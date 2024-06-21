@@ -8,7 +8,7 @@ namespace Constant
         PrivateConnectionScene,
         InGameScene,
         InGameSoloScene,
-        InGameMulti1,
-        InGameMulti2,
+        InLobbyMultiScene,
+        InGameMultiScene,
     }
 }

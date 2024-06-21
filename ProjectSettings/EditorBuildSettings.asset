@@ -24,9 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/InGameSolo.unity
     guid: b73fbfb3d168ac24ea38a3c648849749
   - enabled: 1
-    path: Assets/Scenes/InGameMulti1.unity
-    guid: 52c200b17648d7648b053d066d3afbb4
-  - enabled: 1
-    path: Assets/Scenes/InGameMulti2.unity
+    path: Assets/Scenes/InLobbyMulti.unity
     guid: 08a58d8d97336cc4c8fa788a13b35e46
+  - enabled: 1
+    path: Assets/Scenes/InGameMulti.unity
+    guid: 52c200b17648d7648b053d066d3afbb4
   m_configObjects: {}
