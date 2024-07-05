@@ -1,9 +1,10 @@
 using System.ComponentModel;
 using System.Security.Cryptography;
 using UnityEngine;
+using Fusion;
 namespace Scenes.InGame.Block
 {
-    public class Block : MonoBehaviour, IDamagable
+    public class Block : NetworkBehaviour , IDamagable
     {
         [Header("ブロックのパラメータ")]
         [SerializeField,Tooltip("ブロックの耐久度")]

@@ -1,10 +1,11 @@
 using UnityEngine;
 using Scenes.InGame.Manager;
 using UniRx;
+using Fusion;
 
 namespace Scenes.InGame.Ball
 {
-    public class BallSpawner : MonoBehaviour
+    public class BallSpawner : NetworkBehaviour
     {
         [SerializeField, Tooltip("Ballのプレファブを入れる")]
         GameObject _ballPrefab;
@@ -20,8 +21,17 @@ namespace Scenes.InGame.Ball
                 .Subscribe(_ =>
                 {
                     var Stick = GameObject.FindWithTag("Player");
-                    Instantiate(_ballPrefab, Stick.transform.position + new Vector3(0, _yOffsetDistance, 0), Quaternion.identity, transform.parent);
+                    BallSpawn(Stick.transform.position + new Vector3(0, _yOffsetDistance, 0));
+                    //Instantiate(_ballPrefab, Stick.transform.position + new Vector3(0, _yOffsetDistance, 0), Quaternion.identity, transform.parent);
                 }).AddTo(this);
+        }
+
+        private void BallSpawn(Vector3 Pos)
+        {
+            if(Runner.IsServer)
+            {
+                Runner.Spawn(_ballPrefab, Pos, Quaternion.identity, null);
+            }
         }
     }
 }
