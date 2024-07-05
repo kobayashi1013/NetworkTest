@@ -30,11 +30,11 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         await _runner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
-            SessionName = "TestRoom",
+            SessionName = "Test",
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
-        
+
     }
 
 
@@ -58,20 +58,28 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     NetworkPrefabRef stickPrefab;
     [SerializeField]
     Transform PlayerSpawnPos;
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) 
+    int PlayerNum = 0;
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log(runner.IsServer);
         if (runner.IsServer)
         {
             //var SpawnPos = PlayerSpawnPos.position;
-            var SpawnPos = new Vector3(0, -4f, 0);
-            if (runner.IsServer)
+            if (PlayerNum == 0)
             {
+                var SpawnPos = new Vector3(0, -4f, 0);
                 Debug.Log(SpawnPos);
                 NetworkObject playerObj = runner.Spawn(stickPrefab, SpawnPos, Quaternion.identity, player);
-                SpawnPos.y -= 0.2f;
-
+                PlayerNum++;
             }
+            else
+            {
+                var SpawnPos = new Vector3(0, -4.4f, 0);
+                Debug.Log(SpawnPos);
+                NetworkObject playerObj = runner.Spawn(stickPrefab, SpawnPos, Quaternion.identity, player);
+            }
+
+
+
             //stickSpawner.SpawnPlayers(runner, player);
         }
     }
@@ -84,6 +92,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         data.Buttons.Set(NetworkInputButtons.LeftArrow, Input.GetKey(KeyCode.LeftArrow));
         data.Buttons.Set(NetworkInputButtons.RightArrow, Input.GetKey(KeyCode.RightArrow));
         data.Buttons.Set(NetworkInputButtons.Space, Input.GetKey(KeyCode.Space));
+
+
         input.Set(data);
     }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
