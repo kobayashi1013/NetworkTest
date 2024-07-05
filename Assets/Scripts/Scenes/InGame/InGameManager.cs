@@ -66,18 +66,18 @@ namespace Scenes.InGame.Manager
         void Start()
         {
             _ballSpawner = GetComponent<BallSpawner>();
-            //StartCoroutine(BallSpawn());
+            StartCoroutine(BallSpawn());
         }
 
 
-        /*IEnumerator BallSpawn()
+        IEnumerator BallSpawn()
         {
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
             Spawn.OnNext(default);
             
-        }*/
+        }
 
-        public override void FixedUpdateNetwork()
+        /*public override void FixedUpdateNetwork()
         {
             UnityEngine.Debug.Log("Spawn3");
             if (GetInput(out NetworkInputData data))
@@ -91,7 +91,7 @@ namespace Scenes.InGame.Manager
                 }
 
             }
-        }
+        }*/
 
         public void GameOver()
         {
