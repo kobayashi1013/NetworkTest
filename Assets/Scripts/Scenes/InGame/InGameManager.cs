@@ -16,7 +16,9 @@ namespace Scenes.InGame.Manager
         BallStatus _ballStatus;
         StickStatus _stickStatus;
         public static InGameManager Instance;
-        private int _score = 0;//スコア
+
+        [Networked,OnChangedRender(nameof(OnScoreChanged))]
+        private int _score { get; set; } = 0;//スコア
         private int _blockSize = 0;//blockの数
         [SerializeField,Tooltip("スコアを表示するUI")]
         TextMeshProUGUI _socreText;
@@ -35,6 +37,26 @@ namespace Scenes.InGame.Manager
                 Destroy(gameObject);
             }
         }
+<<<<<<< Updated upstream
+=======
+
+        private void OnScoreChanged()
+        {
+            UnityEngine.Debug.Log(_score);
+            _blockSize--;
+            _socreText.text = $"SCORE:{_score}";
+            if (_blockSize <= 0)
+            {
+                GameOver();
+            }
+        }
+
+        /*public override void Spawned()
+        {
+            UnityEngine.Debug.Log("a");
+            stickSpawner.SpawnPlayers(Runner);
+        }*/
+>>>>>>> Stashed changes
         void Start()
         {
             _ballSpawner = GetComponent<BallSpawner>();
@@ -62,12 +84,7 @@ namespace Scenes.InGame.Manager
         public void BlockDestroy()
         {
             _score += 100;
-            _blockSize--;
-            _socreText.text = $"SCORE:{_score}";
-            if(_blockSize <= 0)
-            {
-                GameOver();
-            }
+            
         }
 
         public void ChangeScore(int score)
