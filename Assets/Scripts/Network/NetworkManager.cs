@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Fusion;
 using Fusion.Sockets;
 using Utils;
 using Constant;
+using Prefabs;
 
 namespace Network
 {
@@ -16,6 +18,7 @@ namespace Network
         [SerializeField] private GameObject _inLobbyMultiManager;
         [SerializeField] private GameObject _inGameMultiManager;
         [Header("Prefabs")]
+        [SerializeField] private NetworkManagerHandler _networkManagerHandlerPrefab;
         [SerializeField] private GameObject _playerPrefab;
 
         public static NetworkRunner Runner;
@@ -39,9 +42,28 @@ namespace Network
             //ホスト権限
             if (runner.IsServer)
             {
-                //プレイヤー登録
-                runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
-                playerList.Add(player, null);
+                //ホストマイグレーション時の復元の確認
+                int token = new Guid(runner.GetPlayerConnectionToken(player)).GetHashCode();
+                var playerInfoList = FindObjectsOfType<PlayerInfo>();
+                var newPlayer = playerInfoList.FirstOrDefault(player => player.connectionToken == token);
+
+                if (newPlayer != null)
+                {
+                    newPlayer.Object.AssignInputAuthority(player);
+                    playerList.Add(player, newPlayer.gameObject.GetComponent<NetworkObject>());
+                }
+                else //新規プレイヤー
+                {
+                    //新規プレイヤー
+                    var playerObj = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player,
+                        (_, obj) =>
+                        {
+                            var playerInfo = obj.GetComponent<PlayerInfo>();
+                            playerInfo.connectionToken = token;
+                            playerInfo.hostId = runner.LocalPlayer.PlayerId;
+                        });
+                    playerList.Add(player, playerObj);
+                }
             }
         }
 
@@ -75,7 +97,13 @@ namespace Network
         }
 
         public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
-        public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
+
+        public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+        {
+            /*playerList.Clear();
+            var networkRunnerHandler = Instantiate(_networkManagerHandlerPrefab);
+            networkRunnerHandler.ResetNetworkRunner(runner, hostMigrationToken);*/
+        }
 
         //シーンマネージャーの準備
         public void OnSceneLoadDone(NetworkRunner runner)

@@ -21,7 +21,10 @@ namespace Scenes.StartMenu.Manager
             //ゲーム設定
             if (UserInfo.MyInfo == null)
             {
-                UserInfo.MyInfo = new UserInfo(Random.Range(0, 100).ToString());
+                int userId = Random.Range(0, 100); //ユーザーID
+                string userName = Random.Range(0, 100).ToString(); //ユーザー名
+
+                UserInfo.MyInfo = new UserInfo(userId, userName);
             }
         }
 

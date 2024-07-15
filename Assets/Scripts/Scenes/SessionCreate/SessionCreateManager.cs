@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ using Fusion;
 using Prefabs;
 using Network;
 using Constant;
+using Utils;
 
 namespace Scenes.LobbyCreate.Manager
 {
@@ -78,6 +80,7 @@ namespace Scenes.LobbyCreate.Manager
                 SessionName = _sessionNameInputField.text, //セッション名の決定
                 SessionProperties = customProps,
                 PlayerCount = _maxPlayer, //最大人数の決定
+                ConnectionToken = UserInfo.MyInfo.connectionToken //トークン
             });
 
             if (result.Ok)

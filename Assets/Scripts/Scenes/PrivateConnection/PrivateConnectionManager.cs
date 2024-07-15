@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using Fusion;
 using Network;
 using Constant;
 using Prefabs;
+using Utils;
 
 namespace Scenes.PrivateConnection.Manager
 {
@@ -69,7 +71,8 @@ namespace Scenes.PrivateConnection.Manager
                 GameMode = GameMode.Client,
                 Scene = SceneRef.FromIndex((int)SceneName.InLobbyMultiScene),
                 SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
-                SessionName = _sessionNameInputField.text
+                SessionName = _sessionNameInputField.text,
+                ConnectionToken = UserInfo.MyInfo.connectionToken
             });
 
             if (result.Ok)

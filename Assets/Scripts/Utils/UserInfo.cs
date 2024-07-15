@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,11 +9,16 @@ namespace Utils
     {
         public static UserInfo MyInfo;
 
-        public string username; //ユーザー名
+        public int userId; //ユーザーID
+        public string userName; //ユーザー名
+        public byte[] connectionToken; //接続トークン
+        public int hostId; //ホストID
 
-        public UserInfo(string un)
+        public UserInfo(int id, string name)
         {
-            username = un;
+            userId = id;
+            userName = name;
+            connectionToken = Guid.NewGuid().ToByteArray();
         }
     }
 }

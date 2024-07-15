@@ -3,26 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Utils;
+using System;
 
 namespace Prefabs
 {
     public class PlayerInfo : NetworkBehaviour
     {
-        [Networked] public string username { get;  set; }
+        [Networked] public int connectionToken { get; set; }
+        [Networked] public int hostId { get; set; }
+        [Networked] public int userId { get; set; }
+        [Networked] public string userName { get;  set; }
 
         public override void Spawned()
         {
-            if (Object.HasInputAuthority)
+            if (!Object.IsResume)
             {
-                Rpc_PostUserInfo(UserInfo.MyInfo.username);
+                if (Object.HasInputAuthority)
+                {
+                    Rpc_PostUserInfo(
+                        connectionToken,
+                        hostId,
+                        UserInfo.MyInfo.userId,
+                        UserInfo.MyInfo.userName);
+                }
             }
         }
 
-        //ユーザー情報の送信
-        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        private void Rpc_PostUserInfo(string un)
+        //ホストへののデータ送信
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        private void Rpc_PostUserInfo(int token, int hid, int uid, string name)
         {
-            username = un; //ユーザー名
+            connectionToken = token;
+            hostId = hid;
+            userId = uid;
+            userName = name;
         }
     }
 }
