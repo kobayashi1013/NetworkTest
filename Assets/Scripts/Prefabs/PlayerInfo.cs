@@ -8,21 +8,26 @@ namespace Prefabs
 {
     public class PlayerInfo : NetworkBehaviour
     {
-        [Networked] public string username { get;  set; }
+        [Networked] public int token { get; set; }
+        [Networked] public int hostId { get; set; }
+        [Networked] public int userId { get; set; }
+        [Networked] public string userName { get;  set; }
 
         public override void Spawned()
         {
             if (Object.HasInputAuthority)
             {
-                Rpc_PostUserInfo(UserInfo.MyInfo.username);
+                Rpc_PostUserInfo(UserInfo.MyInfo.userId,
+                    UserInfo.MyInfo.userName);
             }
         }
 
-        //ユーザー情報の送信
-        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        private void Rpc_PostUserInfo(string un)
+        //ホストへののデータ送信
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        private void Rpc_PostUserInfo(int id, string name)
         {
-            username = un; //ユーザー名
+            userId = id;
+            userName = name;
         }
     }
 }

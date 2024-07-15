@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using Fusion;
 using Scenes.Lobby.Manager;
 using Network;
 using Constant;
+using Utils;
 
 namespace Prefabs
 {
@@ -64,7 +66,8 @@ namespace Prefabs
                 GameMode = GameMode.Client,
                 Scene = SceneRef.FromIndex((int)SceneName.InLobbyMultiScene),
                 SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
-                SessionName = _sessionInfo.Name
+                SessionName = _sessionInfo.Name,
+                ConnectionToken = UserInfo.MyInfo.connectionToken
             });
 
             if (result.Ok)
