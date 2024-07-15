@@ -62,6 +62,8 @@ namespace Network
                         newObj.CopyStateFrom(resumeObj);
                     });
                 }
+
+                Debug.Log(resumeObj);
             }
         }
     }

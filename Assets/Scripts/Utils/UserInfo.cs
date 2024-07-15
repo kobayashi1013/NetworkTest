@@ -12,6 +12,7 @@ namespace Utils
         public int userId; //ユーザーID
         public string userName; //ユーザー名
         public byte[] connectionToken; //接続トークン
+        public int hostId; //ホストID
 
         public UserInfo(int id, string name)
         {

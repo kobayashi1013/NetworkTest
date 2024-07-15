@@ -4,6 +4,8 @@ using UnityEngine;
 using Fusion;
 using Network;
 using Constant;
+using System;
+using Prefabs;
 
 namespace Scenes.InLobbyMulti.Manager
 {
@@ -16,15 +18,22 @@ namespace Scenes.InLobbyMulti.Manager
         {
             //Debug.Log("InLobbyMultiScene");
 
-            //ホスト権限
-            if (NetworkManager.Runner.IsServer)
+            //マイグレーション例外
+            if (!Object.IsResume)
             {
-                var playerKeys = new List<PlayerRef>(NetworkManager.Instance.playerList.Keys);
-                foreach (var player in playerKeys)
+                //ホスト権限
+                if (NetworkManager.Runner.IsServer)
                 {
-                    //プレイヤーとの紐づけ更新
-                    NetworkObject networkObj = NetworkManager.Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
-                    NetworkManager.Instance.playerList[player] = networkObj;
+                    var playerKeys = new List<PlayerRef>(NetworkManager.Instance.playerList.Keys);
+                    foreach (var player in playerKeys)
+                    {
+                        //プレイヤーとの紐づけ更新
+                        NetworkObject networkObj = NetworkManager.Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+                        var playerInfo = networkObj.GetComponent<PlayerInfo>();
+                        playerInfo.connectionToken = new Guid(NetworkManager.Runner.GetPlayerConnectionToken(player)).GetHashCode();
+                        playerInfo.hostId = NetworkManager.Runner.LocalPlayer.PlayerId;
+                        NetworkManager.Instance.playerList[player] = networkObj;
+                    }
                 }
             }
         }

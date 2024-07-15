@@ -45,7 +45,7 @@ namespace Network
                 //ホストマイグレーション時の復元の確認
                 int token = new Guid(runner.GetPlayerConnectionToken(player)).GetHashCode();
                 var playerInfoList = FindObjectsOfType<PlayerInfo>();
-                var newPlayer = playerInfoList.FirstOrDefault(player => player.token == token);
+                var newPlayer = playerInfoList.FirstOrDefault(player => player.connectionToken == token);
 
                 if (newPlayer != null)
                 {
@@ -59,7 +59,7 @@ namespace Network
                         (_, obj) =>
                         {
                             var playerInfo = obj.GetComponent<PlayerInfo>();
-                            playerInfo.token = token;
+                            playerInfo.connectionToken = token;
                             playerInfo.hostId = runner.LocalPlayer.PlayerId;
                         });
                     playerList.Add(player, playerObj);
@@ -100,9 +100,9 @@ namespace Network
 
         public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
         {
-            playerList.Clear();
+            /*playerList.Clear();
             var networkRunnerHandler = Instantiate(_networkManagerHandlerPrefab);
-            networkRunnerHandler.ResetNetworkRunner(runner, hostMigrationToken);
+            networkRunnerHandler.ResetNetworkRunner(runner, hostMigrationToken);*/
         }
 
         //シーンマネージャーの準備
