@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2754395942222596666}
   - component: {fileID: 7602511337590015186}
   - component: {fileID: 2453206830086888529}
+  - component: {fileID: 7283028100172356525}
   m_Layer: 0
   m_Name: NetworkStick
   m_TagString: Player
@@ -50,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df6d812dcb9ffd46a2c7b57987540a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 15
+  _moveSpeed: 10
 --- !u!114 &3721534430223982735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,7 +59,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4540321626584109202}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa75c781d0519a0468f9a12e3b2b4919, type: 3}
   m_Name: 
@@ -204,7 +205,9 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 3912775628973900370}
   - {fileID: 2453206830086888529}
+  - {fileID: 7283028100172356525}
 --- !u!114 &2453206830086888529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,3 +224,16 @@ MonoBehaviour:
   SyncParent: 0
   _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
+--- !u!114 &7283028100172356525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4540321626584109202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 457ac62600384674486b5ef48828e15c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rigidbody2D: {fileID: 973687200181630202}

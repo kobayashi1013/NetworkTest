@@ -57,6 +57,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 7726633060198744624}
   - {fileID: 5052291637404369937}
+  - {fileID: -1568170515766715991}
 --- !u!50 &5616746889671026934
 Rigidbody2D:
   serializedVersion: 4
@@ -163,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 457ac62600384674486b5ef48828e15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rigidbody2D: {fileID: 0}
 --- !u!114 &-1568170515766715991
 MonoBehaviour:
   m_ObjectHideFlags: 0
