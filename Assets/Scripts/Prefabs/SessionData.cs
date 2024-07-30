@@ -61,26 +61,19 @@ namespace Prefabs
             LobbyManager.Instance.AllButtonLock();
 
             //セッションに参加
-            var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
+            var args = new StartGameArgs()
             {
                 GameMode = GameMode.Client,
                 Scene = SceneRef.FromIndex((int)SceneName.InLobbyMultiScene),
-                SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
+                SceneManager = NetworkManager.Instance.GetComponent<NetworkSceneManagerDefault>(),
                 SessionName = _sessionInfo.Name,
-                ConnectionToken = UserInfo.MyInfo.connectionToken
-            });
+                ConnectionToken = Guid.NewGuid().ToByteArray(),
+            };
 
-            if (result.Ok)
-            {
-                Debug.Log("Client");
-            }
-            else
-            {
-                Debug.LogError($"error : {result.ShutdownReason}");
+            var result = await NetworkManager.Instance.JoinSession(NetworkManager.Runner, args);
 
-                //ロック解除
-                LobbyManager.Instance.AllButtonRelease();
-            }
+            //ロック解除
+            if (!result) LobbyManager.Instance.AllButtonRelease();
         }
     }
 }

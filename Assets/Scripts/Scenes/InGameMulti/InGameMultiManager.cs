@@ -1,53 +1,67 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Network;
-using Constant;
-using System;
 using Prefabs;
+using Utils;
+using Constant;
 
-namespace Scenes.InGameMulti.Manager
+namespace Scenes.InGameMulti
 {
-    public class InGameMultiManager : NetworkBehaviour
+    [RequireComponent(typeof(NetworkObjectTrackingData))]
+    public class InGameMultiManager : NetworkBehaviour, ISceneManager
     {
         [Header("Prefabs")]
         [SerializeField] private GameObject _playerPrefab;
 
         public override void Spawned()
         {
-            //Debug.Log("InLobbyMultiScene");
-
-            //マイグレーション例外
-            if (!Object.IsResume)
+            if (Runner.IsServer && !Runner.IsResume)
             {
-                //ホスト権限
-                if (NetworkManager.Runner.IsServer)
+                var playerList = new List<PlayerRef>(SessionInfoCache.Instance.playerList.Keys);
+                foreach (var player in playerList)
                 {
-                    var playerKeys = new List<PlayerRef>(NetworkManager.Instance.playerList.Keys);
-                    foreach (var player in playerKeys)
-                    {
-                        //プレイヤーとの紐づけ更新
-                        NetworkObject networkObj = NetworkManager.Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
-                        var playerInfo = networkObj.GetComponent<PlayerInfo>();
-                        playerInfo.connectionToken = new Guid(NetworkManager.Runner.GetPlayerConnectionToken(player)).GetHashCode();
-                        playerInfo.hostId = NetworkManager.Runner.LocalPlayer.PlayerId;
-                        NetworkManager.Instance.playerList[player] = networkObj;
-                    }
+                    var playerObj = SpawnPlayer(Runner, player);
+                    SessionInfoCache.Instance.playerList[player] = playerObj;
                 }
             }
         }
 
         public override void Render()
         {
-            //ホスト権限
-            if (NetworkManager.Runner.IsServer)
+            if (Runner.IsServer)
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    Runner.LoadScene(SceneRef.FromIndex((int)SceneName.InLobbyMultiScene));
+                    NetworkManager.Runner.LoadScene(SceneRef.FromIndex((int)SceneName.InLobbyMultiScene));
                 }
             }
+        }
+
+        public NetworkObject SpawnPlayer(NetworkRunner runner, PlayerRef player)
+        {
+            var position = new Vector3(UnityEngine.Random.Range(0, 100), 0, 0);
+
+            var playerObj = runner.Spawn(
+                _playerPrefab,
+                position,
+                Quaternion.identity,
+                player,
+                (_, obj) =>
+                {
+                    var playerInfo = obj.GetComponent<PlayerInfo>();
+                    var objectTokenCs = obj.GetComponent<NetworkObjectTrackingData>();
+                    var objectToken = "token";
+                    if (runner.LocalPlayer == player) objectToken = "HOST";
+                    else objectToken = Guid.NewGuid().ToString();
+
+                    playerInfo.connectionToken = new Guid(runner.GetPlayerConnectionToken(player)).GetHashCode();
+                    objectTokenCs.token = objectToken;
+                });
+
+            return playerObj;
         }
     }
 }

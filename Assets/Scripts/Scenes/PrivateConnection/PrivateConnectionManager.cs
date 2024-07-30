@@ -66,26 +66,19 @@ namespace Scenes.PrivateConnection.Manager
             AllButtonLock();
 
             //セッションに参加
-            var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
+            var args = new StartGameArgs()
             {
                 GameMode = GameMode.Client,
                 Scene = SceneRef.FromIndex((int)SceneName.InLobbyMultiScene),
-                SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(),
+                SceneManager = NetworkManager.Runner.GetComponent<NetworkSceneManagerDefault>(),
                 SessionName = _sessionNameInputField.text,
-                ConnectionToken = UserInfo.MyInfo.connectionToken
-            });
+                ConnectionToken = Guid.NewGuid().ToByteArray(),
+            };
 
-            if (result.Ok)
-            {
-                Debug.Log("Client");
-            }
-            else
-            {
-                Debug.LogError($"error : {result.ShutdownReason}");
+            var result = await NetworkManager.Instance.JoinSession(NetworkManager.Runner, args);
 
-                //ロック解除
-                AllButtonRelease();
-            }
+            //ロック解除
+            if (!result) AllButtonRelease();
         }
 
         //Back

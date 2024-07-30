@@ -11,7 +11,7 @@ using Network;
 using Constant;
 using Utils;
 
-namespace Scenes.LobbyCreate.Manager
+namespace Scenes.LobbyCreate
 {
     public class SessionCreateManager : MonoBehaviour
     {
@@ -72,28 +72,21 @@ namespace Scenes.LobbyCreate.Manager
             customProps["visible"] = !_isVisibleToggle.isOn; //可視・不可視
 
             //セッション作成
-            var result = await NetworkManager.Runner.StartGame(new StartGameArgs()
+            var args = new StartGameArgs()
             {
                 GameMode = GameMode.Host, //ゲームでの権限
                 Scene = SceneRef.FromIndex((int)SceneName.InLobbyMultiScene), //次のゲームシーンの選択
-                SceneManager = this.gameObject.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のSceneManagerの指定
+                SceneManager = NetworkManager.Runner.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のSceneManagerの指定
                 SessionName = _sessionNameInputField.text, //セッション名の決定
                 SessionProperties = customProps,
                 PlayerCount = _maxPlayer, //最大人数の決定
-                ConnectionToken = UserInfo.MyInfo.connectionToken //トークン
-            });
+                ConnectionToken = Guid.NewGuid().ToByteArray(), //プレイヤートークンの決定
+            };
 
-            if (result.Ok)
-            {
-                Debug.Log("Host");
-            }
-            else
-            {
-                Debug.LogError($"error : {result.ShutdownReason}");
+            var result = await NetworkManager.Instance.JoinSession(NetworkManager.Runner, args);
 
-                //ロック解除
-                AllButtonRelease();
-            }
+            //ロック解除
+            if (!result) AllButtonRelease();
         }
 
         //Back
