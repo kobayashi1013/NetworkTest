@@ -4,16 +4,12 @@ using UnityEngine;
 using Scenes.InGame.Ball;
 using Scenes.InGame.Stick;
 using TMPro;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Scenes.InGame.Ball;
-using Scenes.InGame.Stick;
-using TMPro;
 using UniRx;
+using Network;
 using System;
-using System.Diagnostics;
 using Fusion;
+using Prefabs;
+using Utils;
 
 namespace Scenes.InGame.Manager
 {
@@ -30,10 +26,13 @@ namespace Scenes.InGame.Manager
         [SerializeField, Tooltip("スコアを表示するUI")]
         TextMeshProUGUI _socreText;
 
+        [SerializeField]
+        GameObject _playerPrefab;
+
         private Subject<Unit> Spawn = new Subject<Unit>();
         public IObservable<Unit> OnSpawn => Spawn;
 
-        private void Awake()
+        public override void Spawned()
         {
             if (Instance == null)
             {
@@ -43,8 +42,42 @@ namespace Scenes.InGame.Manager
             {
                 Destroy(gameObject);
             }
+
+            if (Runner.IsServer && !Runner.IsResume)
+            {
+                var playerList = new List<PlayerRef>(SessionInfoCache.Instance.playerList.Keys);
+                foreach (var player in playerList)
+                {
+                    var playerObj = SpawnPlayer(Runner, player);
+                    SessionInfoCache.Instance.playerList[player] = playerObj;
+                }
+
+            }
         }
 
+        public NetworkObject SpawnPlayer(NetworkRunner runner, PlayerRef player)
+        {
+            var position = new Vector3(UnityEngine.Random.Range(0, 100), 0, 0);
+
+            var playerObj = runner.Spawn(
+                _playerPrefab,
+                position,
+                Quaternion.identity,
+                player,
+                (_, obj) =>
+                {
+                    var playerInfo = obj.GetComponent<PlayerInfo>();
+                    var objectTokenCs = obj.GetComponent<NetworkObjectTrackingData>();
+                    var objectToken = "token";
+                    if (runner.LocalPlayer == player) objectToken = "HOST";
+                    else objectToken = Guid.NewGuid().ToString();
+
+                    playerInfo.connectionToken = new Guid(runner.GetPlayerConnectionToken(player)).GetHashCode();
+                    objectTokenCs.token = objectToken;
+                });
+
+            return playerObj;
+        }
 
         private void OnScoreChanged()
         {
@@ -57,41 +90,17 @@ namespace Scenes.InGame.Manager
             }
         }
 
-        /*public override void Spawned()
-        {
-            UnityEngine.Debug.Log("a");
-            stickSpawner.SpawnPlayers(Runner);
-        }*/
-
         void Start()
         {
             _ballSpawner = GetComponent<BallSpawner>();
             StartCoroutine(BallSpawn());
         }
 
-
         IEnumerator BallSpawn()
         {
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
-            Spawn.OnNext(default);
-            
+            Spawn.OnNext(default);  
         }
-
-        /*public override void FixedUpdateNetwork()
-        {
-            UnityEngine.Debug.Log("Spawn3");
-            if (GetInput(out NetworkInputData data))
-            {
-                UnityEngine.Debug.Log("Spawn2");
-                if (data.Buttons.IsSet(NetworkInputButtons.Space))
-                {
-                    UnityEngine.Debug.Log("Spawn");
-                    Spawn.OnNext(default);    
-                    Spawn.Dispose();
-                }
-
-            }
-        }*/
 
         public void GameOver()
         {
