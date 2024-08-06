@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _socreText: {fileID: 0}
-  _playerPrefab: {fileID: 0}
+  _playerPrefab: {fileID: 4540321626584109202, guid: ede2618f2fdeb8746b0cac3249a79931, type: 3}
 --- !u!114 &7030930854564633213
 MonoBehaviour:
   m_ObjectHideFlags: 0
