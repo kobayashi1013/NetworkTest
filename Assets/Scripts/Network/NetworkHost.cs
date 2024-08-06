@@ -39,7 +39,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
 
 
-    private void OnGUI()
+    /*private void OnGUI()
     {
         if (_runner == null)
         {
@@ -52,7 +52,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
                 StartGame(GameMode.Client);
             }
         }
-    }
+    }*/
 
     [SerializeField]
     NetworkPrefabRef stickPrefab;

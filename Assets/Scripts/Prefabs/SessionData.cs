@@ -64,7 +64,7 @@ namespace Prefabs
             var args = new StartGameArgs()
             {
                 GameMode = GameMode.Client,
-                Scene = SceneRef.FromIndex((int)SceneName.InLobbyMultiScene),
+                Scene = SceneRef.FromIndex((int)SceneName.InGameScene),
                 SceneManager = NetworkManager.Instance.GetComponent<NetworkSceneManagerDefault>(),
                 SessionName = _sessionInfo.Name,
                 ConnectionToken = Guid.NewGuid().ToByteArray(),

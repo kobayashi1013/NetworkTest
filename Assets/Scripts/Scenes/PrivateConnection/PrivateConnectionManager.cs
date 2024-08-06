@@ -69,7 +69,7 @@ namespace Scenes.PrivateConnection.Manager
             var args = new StartGameArgs()
             {
                 GameMode = GameMode.Client,
-                Scene = SceneRef.FromIndex((int)SceneName.InLobbyMultiScene),
+                Scene = SceneRef.FromIndex((int)SceneName.InGameScene),
                 SceneManager = NetworkManager.Runner.GetComponent<NetworkSceneManagerDefault>(),
                 SessionName = _sessionNameInputField.text,
                 ConnectionToken = Guid.NewGuid().ToByteArray(),

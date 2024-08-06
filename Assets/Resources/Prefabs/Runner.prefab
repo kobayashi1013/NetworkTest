@@ -75,7 +75,5 @@ MonoBehaviour:
   _hostMigrationHandler: {fileID: 696040151152982331, guid: f30676a5483d291428215361c8c782a6, type: 3}
   _sceneManagerTable:
     _items:
-    - Key: 6
+    - Key: 5
       Value: {fileID: 8429318218447903649, guid: dc938466ccbbc6746a22aa17deb136ea, type: 3}
-    - Key: 7
-      Value: {fileID: 3436535949728083077, guid: 23887a3652f6c994eb59a1289aaa0421, type: 3}

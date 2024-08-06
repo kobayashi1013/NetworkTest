@@ -6,9 +6,7 @@ namespace Constant
         LobbyScene,
         SessionCreateScene,
         PrivateConnectionScene,
-        InGameScene,
         InGameSoloScene,
-        InLobbyMultiScene,
-        InGameMultiScene,
+        InGameScene,
     }
 }
