@@ -13,7 +13,7 @@ using Utils;
 
 namespace Scenes.InGame.Manager
 {
-    public class InGameManager : NetworkBehaviour
+    public class InGameManager : NetworkBehaviour, ISceneManager
     {
         BallSpawner _ballSpawner;
         BallStatus _ballStatus;
@@ -57,7 +57,9 @@ namespace Scenes.InGame.Manager
 
         public NetworkObject SpawnPlayer(NetworkRunner runner, PlayerRef player)
         {
-            var position = new Vector3(UnityEngine.Random.Range(0, 100), 0, 0);
+            var position = Vector3.zero;
+            if (runner.LocalPlayer == player) position = new Vector3(0, -3, 0);
+            else position = new Vector3(0, -4, 0);
 
             var playerObj = runner.Spawn(
                 _playerPrefab,

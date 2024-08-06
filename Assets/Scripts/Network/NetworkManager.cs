@@ -119,7 +119,19 @@ namespace Network
             }
         }
 
-        public void OnInput(NetworkRunner runner, NetworkInput input) { }
+        public void OnInput(NetworkRunner runner, NetworkInput input)
+        {
+            var data = new NetworkInputData();
+
+            //data.Direction = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+            data.Buttons.Set(NetworkInputButtons.LeftArrow, Input.GetKey(KeyCode.LeftArrow));
+            data.Buttons.Set(NetworkInputButtons.RightArrow, Input.GetKey(KeyCode.RightArrow));
+            data.Buttons.Set(NetworkInputButtons.Space, Input.GetKey(KeyCode.Space));
+
+
+            input.Set(data);
+        }
+
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
         public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
         public void OnConnectedToServer(NetworkRunner runner) { }
