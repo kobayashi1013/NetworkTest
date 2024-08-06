@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8783956054418173855
+--- !u!1 &3838844466009022826
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,72 +8,76 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6458379628235542147}
-  - component: {fileID: 7876573081687707972}
-  - component: {fileID: 1164938755537394842}
-  - component: {fileID: 8433672725959175577}
+  - component: {fileID: 4508907112111898526}
+  - component: {fileID: 4326421583730553701}
+  - component: {fileID: 7030930854564633213}
+  - component: {fileID: 1176087677383449744}
   m_Layer: 0
-  m_Name: Runner
+  m_Name: Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6458379628235542147
+--- !u!4 &4508907112111898526
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8783956054418173855}
+  m_GameObject: {fileID: 3838844466009022826}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.43981618, y: 5.8177733, z: -6.2876825}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7876573081687707972
+--- !u!114 &4326421583730553701
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8783956054418173855}
+  m_GameObject: {fileID: 3838844466009022826}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1199893898, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 11500000, guid: 0230ebabb45df8c4384fe59aa50a312f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1164938755537394842
+  _socreText: {fileID: 0}
+  _playerPrefab: {fileID: 0}
+--- !u!114 &7030930854564633213
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8783956054418173855}
+  m_GameObject: {fileID: 3838844466009022826}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90a93abf1a391964a94e5c139605105b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ce120496bab37b46a54a663b57d1243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsSceneTakeOverEnabled: 1
-  LogSceneLoadErrors: 1
---- !u!114 &8433672725959175577
+  _ballPrefab: {fileID: 3972988217090592638, guid: f01da9fabe39a984a99fab8d7b41d7ed, type: 3}
+  _yOffsetDistance: 0.5
+--- !u!114 &1176087677383449744
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8783956054418173855}
+  m_GameObject: {fileID: 3838844466009022826}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a89bc3be120c6945abc4e54f33c6a7d, type: 3}
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hostMigrationHandler: {fileID: 696040151152982331, guid: f30676a5483d291428215361c8c782a6, type: 3}
-  _sceneManagerTable:
-    _items:
-    - Key: 5
-      Value: {fileID: 3838844466009022826, guid: 7541889ae9bffa549944a559e90982aa, type: 3}
+  SortKey: 1068902850
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 4326421583730553701}
+  - {fileID: 7030930854564633213}
